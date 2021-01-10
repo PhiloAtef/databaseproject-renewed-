@@ -48,12 +48,14 @@ namespace DatabaseProject2
                     command.ExecuteNonQuery();
                     connection.Close();
                     this.Close();
+                    Form3 form3 = new Form3();
+                    form3.Show();
                 }
               
             }
             catch (Exception)
             {
-                MessageBox.Show("Process failed sucessfuly ");
+                MessageBox.Show("Process failed sucessfuly :(");
                 this.Close();
             }
            

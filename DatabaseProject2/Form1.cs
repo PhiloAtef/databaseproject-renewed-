@@ -22,28 +22,68 @@ namespace DatabaseProject2
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Form2 f2 = new Form2();
-            f2.ShowDialog();
+           if(checkBox1.Checked)
+            {
+                Vendor form = new Vendor();
+                form.Show();
+            }
+            else
+            {
+                Form2 f2 = new Form2();
+                f2.ShowDialog();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int p = int.Parse(password.Text);
-            string connectionString = "Data Source=.;Initial Catalog=database;Integrated Security=True";
-            SqlConnection connection = new SqlConnection(connectionString);
-            SqlCommand cmd = new SqlCommand("select * from customer where cust_username= '"+username.Text+"' and cust_password = '"+p+"';", connection);
-            connection.Open();
-            SqlDataReader d = cmd.ExecuteReader();
-            if (d.Read())
+            try
             {
+                string connectionString = "Data Source=.;Initial Catalog=database;Integrated Security=True";
+                SqlConnection connection = new SqlConnection(connectionString);
+                if (checkBox1.Checked)
+                {
 
-                currentUsername = username.Text;
-                Form3 form3 = new Form3();
-                form3.Show();
+                    int id = int.Parse(password.Text);
+
+                    SqlCommand smd = new SqlCommand("select * from Vendor where Vendor_Name= '" + username.Text + "' and VendorID = '" + id + "';", connection);
+                    connection.Open();
+                    SqlDataReader R = smd.ExecuteReader();
+                    if (R.Read())
+                    {
+                        ///////////////////////////////////////////////////////////
+                        currentUsername = username.Text;
+                        Form5 form = new Form5();
+                        form.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("please enter valid vendor name and ID");
+                    }
+                }
+                else
+                {
+                    int p = int.Parse(password.Text);
+
+                    SqlCommand cmd = new SqlCommand("select * from customer where cust_username= '" + username.Text + "' and cust_password = '" + p + "';", connection);
+                    connection.Open();
+                    SqlDataReader d = cmd.ExecuteReader();
+                    if (d.Read())
+                    {
+
+                        currentUsername = username.Text;
+                        Form3 form3 = new Form3();
+                        form3.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("please enter valid username and password");
+                    }
+                }
             }
-            else
+           
+            catch (Exception)
             {
-                MessageBox.Show("please enter valid username and password");
+                MessageBox.Show("check your data");
             }
         }
 
@@ -51,5 +91,22 @@ namespace DatabaseProject2
         {
 
         }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                label1.Text = "Vendor name";
+                label2.Text = "Vendor ID";             
+            }
+            else
+            {
+                
+                label1.Text = "Username";
+                label2.Text = "Password";
+            }
+        }
+        
+
     }
 }
